@@ -8,6 +8,7 @@ public class Percolation {
     private final int topCell;
     private final int bottomCell;
     private final byte[] vacancy;
+    private final WeightedQuickUnionUF connectedToTop;
 
     public Percolation(int side) {
         if (side <= 0) {
@@ -15,6 +16,7 @@ public class Percolation {
         }
         this.side = side;
         this.weightedQuickUnion = new WeightedQuickUnionUF(side * side + 2);
+        this.connectedToTop = new WeightedQuickUnionUF(side * side + 1);
         this.topCell = side * side;
         this.bottomCell = side * side + 1;
         this.vacancy = new byte[side * side];
@@ -24,6 +26,7 @@ public class Percolation {
     private void initialize() {
         for (int i = 0; i < side; i++) {
             weightedQuickUnion.union(topCell, i);
+            connectedToTop.union(topCell, i);
             weightedQuickUnion.union(bottomCell, side * (side - 1) + i);
         }
     }
@@ -53,6 +56,7 @@ public class Percolation {
 
         if (vacancy[neighbour] != CLOSED) {
             weightedQuickUnion.union(central, neighbour);
+            connectedToTop.union(central, neighbour);
         }
     }
 
@@ -82,7 +86,8 @@ public class Percolation {
             throw new IndexOutOfBoundsException();
         }
         return weightedQuickUnion.connected(topCell, linearPosition(row, col))
-            && vacancy[linearPosition(row, col)] != CLOSED;
+            && vacancy[linearPosition(row, col)] != CLOSED
+            && connectedToTop.connected(topCell, linearPosition(row, col));
     }
 
     private int linearPosition(int row, int col) {
