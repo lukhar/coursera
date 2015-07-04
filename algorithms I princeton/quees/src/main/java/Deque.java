@@ -35,7 +35,6 @@ public class Deque<Item> implements Iterable<Item> {
             return current != null;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public Item next() {
             if (current == null) {
@@ -127,9 +126,9 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private class Node {
-        Node next;
-        Node prev;
-        Item value;
+        private Node next;
+        private Node prev;
+        private Item value;
 
         public Node(Item item) {
             this.value = item;

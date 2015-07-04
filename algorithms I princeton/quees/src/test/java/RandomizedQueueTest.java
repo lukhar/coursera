@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RandomizedQueueTest {
@@ -17,6 +17,7 @@ public class RandomizedQueueTest {
     public void shouldHaveZeroSizeAfterCreation() {
         assertThat(new RandomizedQueue<>().size()).isEqualTo(0);
     }
+
 
     @Test
     public void shouldBeEmptyAfterCreation() {
@@ -46,9 +47,9 @@ public class RandomizedQueueTest {
         when(anyQueue).enqueue(null);
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NullPointerException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NullPointerException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -60,9 +61,9 @@ public class RandomizedQueueTest {
         when(emptyQueue).dequeue();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NoSuchElementException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -74,9 +75,9 @@ public class RandomizedQueueTest {
         when(emptyQueue).sample();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NoSuchElementException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -141,9 +142,9 @@ public class RandomizedQueueTest {
         when(iterator).remove();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(UnsupportedOperationException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -158,7 +159,5 @@ public class RandomizedQueueTest {
         integers.enqueue(2);
         integers.dequeue();
         integers.enqueue(2);
-
-        // then
     }
 }

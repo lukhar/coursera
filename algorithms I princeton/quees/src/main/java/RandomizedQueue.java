@@ -71,7 +71,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Item dequeue() {
         if (isEmpty()) {
             throw new NoSuchElementException();
@@ -97,7 +96,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return item;
     }
 
-    @SuppressWarnings("unchecked")
     public Item sample() {
         if (isEmpty()) {
             throw new NoSuchElementException();
@@ -114,7 +112,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     @Override
     public Iterator<Item> iterator() {
         Object[] items = new Object[size];
-        for (int i = first, j = 0; i <= last; i++) {
+        int j = 0;
+        for (int i = first; i <= last; i++) {
             if (queue[i] != null) {
                 items[j] = queue[i];
                 j++;
@@ -142,7 +141,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             return size > 0;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public Item next() {
             if (!hasNext()) {
@@ -181,7 +179,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (int i = 0; i < numberOfTrials; i++) {
             int uniform = StdRandom.uniform(0, 3);
 
-
             switch (uniform) {
                 case 0:
                     integers.enqueue(StdRandom.uniform(5, 15));
@@ -198,6 +195,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
                         integers.sample();
                         StdOut.println("operation: " + uniform + " iteration: " + i);
                     }
+                    break;
+                default:
                     break;
             }
         }

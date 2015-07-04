@@ -5,8 +5,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.*;
 
 import static com.googlecode.catchexception.CatchException.caughtException;
+import static com.googlecode.catchexception.apis.CatchExceptionAssertJ.then;
 import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DequeTest {
@@ -44,9 +45,9 @@ public class DequeTest {
         when(anyDeck).addFirst(null);
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NullPointerException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NullPointerException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -58,9 +59,9 @@ public class DequeTest {
         when(anyDeque).addLast(null);
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NullPointerException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NullPointerException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -101,9 +102,9 @@ public class DequeTest {
         when(emptyDeque).removeFirst();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NoSuchElementException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -115,9 +116,9 @@ public class DequeTest {
         when(emptyDeque).removeLast();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NoSuchElementException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -163,9 +164,9 @@ public class DequeTest {
         when(iterator).remove();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(UnsupportedOperationException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(UnsupportedOperationException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -196,9 +197,9 @@ public class DequeTest {
         when(iterator).next();
 
         // then
-        assertThat(caughtException())
-                .isInstanceOf(NoSuchElementException.class)
-                .hasNoCause();
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
     }
 
     @Test
@@ -229,7 +230,7 @@ public class DequeTest {
 
         // when
         for (int i = 0; i < 5; i++) {
-           strings.removeFirst();
+            strings.removeFirst();
         }
 
         // then
