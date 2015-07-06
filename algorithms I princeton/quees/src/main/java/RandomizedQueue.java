@@ -78,15 +78,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         shrink();
 
-        int uniform;
+        int randomIndex;
         do {
-            uniform = StdRandom.uniform(first, last + 1);
-        } while (queue[uniform] == null);
+            randomIndex = StdRandom.uniform(first, last + 1);
+        } while (queue[randomIndex] == null);
 
-        Item item = (Item) queue[uniform];
-        queue[uniform] = null;
+        Item item = (Item) queue[randomIndex];
+        queue[randomIndex] = null;
 
-        if (uniform == last && last > -1) {
+        if (randomIndex == last && last > -1) {
             while (last > -1 && queue[last] == null) {
                 last--;
             }
@@ -111,56 +111,50 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     @Override
     public Iterator<Item> iterator() {
-        Object[] items = new Object[size];
-        int j = 0;
-        for (int i = first; i <= last; i++) {
-            if (queue[i] != null) {
-                items[j] = queue[i];
-                j++;
-            }
-        }
-
-        return new RandomIterator<>(items);
+        return new RandomIterator<>(first, last, size);
     }
 
 
     private class RandomIterator<Item> implements Iterator<Item> {
 
-        private final Object[] items;
-        private final int first;
-        private int last;
+        private final int[] shuffled;
+        private int current;
 
-        private RandomIterator(Object[] items) {
-            this.items = items;
-            this.first = 0;
-            this.last = items.length - 1;
+        public RandomIterator(int first, int last, int size) {
+            int[] indexes = new int[size];
+            int i = 0;
+            for (int index = first; index <= last; index++) {
+                if (queue[index] != null) {
+                    indexes[i] = index;
+                    i++;
+                }
+            }
+            StdRandom.shuffle(indexes);
+            this.shuffled = indexes;
+            this.current = 0;
         }
 
         @Override
         public boolean hasNext() {
-            return size > 0;
+            return current < shuffled.length;
         }
 
         @Override
         public Item next() {
-            if (!hasNext()) {
+            if (current >= shuffled.length) {
                 throw new NoSuchElementException();
             }
-            int uniform;
-            do {
-                uniform = StdRandom.uniform(first, last + 1);
-            } while (items[uniform] == null);
 
-            Item item = (Item) items[uniform];
-            items[uniform] = null;
-
-            if (uniform == last && last > -1) {
-                while (last > -1 && items[last] == null) {
-                    last--;
-                }
+            if (shuffled[current] >= queue.length || shuffled[current] < 0) {
+                System.out.println("buya!");
             }
 
-            size--;
+            while (queue[shuffled[current]] == null) {
+                current += 1;
+            }
+
+            Item item = (Item) queue[shuffled[current]];
+            current += 1;
 
             return item;
         }
@@ -172,34 +166,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     public static void main(String[] args) {
-        int numberOfTrials = 1000;
-        RandomizedQueue<Integer> integers = new RandomizedQueue<Integer>();
 
-        // when
-        for (int i = 0; i < numberOfTrials; i++) {
-            int uniform = StdRandom.uniform(0, 3);
-
-            switch (uniform) {
-                case 0:
-                    integers.enqueue(StdRandom.uniform(5, 15));
-                    StdOut.println("operation: " + uniform + " iteration: " + i);
-                    break;
-                case 1:
-                    if (!integers.isEmpty()) {
-                        integers.dequeue();
-                        StdOut.println("operation: " + uniform + " iteration: " + i);
-                    }
-                    break;
-                case 2:
-                    if (!integers.isEmpty()) {
-                        integers.sample();
-                        StdOut.println("operation: " + uniform + " iteration: " + i);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }
 

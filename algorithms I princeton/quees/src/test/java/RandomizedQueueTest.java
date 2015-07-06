@@ -148,16 +148,43 @@ public class RandomizedQueueTest {
     }
 
     @Test
-    public void stressTest() {
+    public void givenEmptyQueueIteratorRaiseExceptionOnIteration() {
         // given
-        RandomizedQueue<Integer> integers = new RandomizedQueue<>();
+        Iterator<Object> iterator = new RandomizedQueue<>().iterator();
 
         // when
-        integers.enqueue(1);
-        integers.dequeue();
-        integers.enqueue(1);
-        integers.enqueue(2);
-        integers.dequeue();
-        integers.enqueue(2);
+        when(iterator).next();
+
+        // then
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
+    }
+    @Test
+    public void givenQueueIteratorRaiseExceptionOnIteration() {
+        // given
+        RandomizedQueue<Integer> objects = new RandomizedQueue<>();
+        objects.enqueue(1);
+        objects.enqueue(2);
+        objects.dequeue();
+        objects.enqueue(3);
+        objects.dequeue();
+        objects.dequeue();
+        objects.enqueue(5);
+        objects.enqueue(6);
+        objects.dequeue();
+        objects.enqueue(7);
+        objects.dequeue();
+
+
+        // when
+        Iterator<Integer> iterator = objects.iterator();
+        iterator.next();
+        when(iterator).next();
+
+        // then
+        assertThat((Throwable) (caughtException()))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasNoCause();
     }
 }

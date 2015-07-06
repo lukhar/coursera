@@ -5,7 +5,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.*;
 
 import static com.googlecode.catchexception.CatchException.caughtException;
-import static com.googlecode.catchexception.apis.CatchExceptionAssertJ.then;
 import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -203,19 +202,18 @@ public class DequeTest {
     }
 
     @Test
-    public void shouldBeEmptyAfterInterMixedOperations() {
+    public void shouldHandleConsecutiveAdditionsAndDeletions() {
         // given
-        Deque<String> strings = new Deque<>();
+        Deque<Integer> integers = new Deque<>();
 
         // when
-        strings.addFirst("one");
-        strings.addLast("two");
-        strings.removeFirst();
-        strings.removeLast();
+        integers.addLast(0);
+        integers.removeLast();
+        integers.addLast(5);
+        integers.addLast(6);
 
         // then
-        assertThat(strings.size()).isEqualTo(0);
-        assertThat(strings.isEmpty()).isTrue();
+        assertThat(integers.removeFirst()).isEqualTo(5);
     }
 
     @Test
