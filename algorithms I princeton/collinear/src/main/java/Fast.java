@@ -30,7 +30,7 @@ public class Fast {
     private List<List<Point>> collinear(Point[] points) {
         List<List<Point>> collinear = new ArrayList<>();
         Point[] ordered = Arrays.copyOf(points, points.length);
-        Set<Double> processedSlopes = new HashSet<>();
+        Set<TreeSet<Point>> processedSequences = new HashSet<>();
         Arrays.sort(ordered);
 
         for (final Point ref : ordered) {
@@ -44,10 +44,6 @@ public class Fast {
 
                 double slope = ref.slopeTo(point);
 
-                if (processedSlopes.contains(slope)) {
-                    continue;
-                }
-
                 if (pointsBySlope.containsKey(slope)) {
                     pointsBySlope.get(slope).add(point);
                 } else {
@@ -59,12 +55,13 @@ public class Fast {
             }
 
             for (TreeSet<Point> sortedPoints : pointsBySlope.values()) {
-                if (sortedPoints.size() >= MIN_SIZE) {
+                if (sortedPoints.size() >= MIN_SIZE
+                    && !processedSequences.contains(sortedPoints)) {
                     collinear.add(new ArrayList<>(sortedPoints));
                 }
             }
 
-            processedSlopes.addAll(pointsBySlope.keySet());
+            processedSequences.addAll(pointsBySlope.values());
         }
 
         return collinear;
