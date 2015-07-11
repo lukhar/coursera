@@ -1,9 +1,6 @@
-import org.fest.assertions.Delta;
-import org.fest.assertions.DoubleAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import sun.net.www.content.audio.x_aiff;
 
 import static org.fest.assertions.Assertions.assertThat;
 

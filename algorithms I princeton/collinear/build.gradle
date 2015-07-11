@@ -1,23 +1,49 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'groovy'
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 idea {
-  module {
-    downloadJavadoc = true
-    downloadSources = true
-  }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 dependencies {
-  compile files('lib/algs4.jar', 'lib/stdlib.jar')
+    compile files('lib/algs4.jar', 'lib/stdlib.jar')
 
-  testCompile 'com.googlecode.catch-exception:catch-exception:1.2.0'
-  testCompile 'org.easytesting:fest-assert:1.4'
-  testCompile 'org.mockito:mockito-all:1.9.5'
-  testCompile 'junit:junit:4.11'
+    testCompile 'com.googlecode.catch-exception:catch-exception:1.2.0'
+    testCompile 'org.easytesting:fest-assert:1.4'
+    testCompile 'org.assertj:assertj-core:3.1.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.3'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
+
+findbugs {
+    excludeFilter = file("$rootProject.projectDir/config/findbugs/findbugs.xml")
+}
+
+task copy(type: Copy) {
+    from 'src/main/java/Brute.java'
+    from 'src/main/java/Fast.java'
+    from 'src/main/java/Point.java'
+    into 'build/collinear'
+}
+
+task zip(dependsOn: copy, type: Zip) {
+    from 'build/collinear'
+}
+
+checkstyle {
+    sourceSets = [ rootProject.sourceSets.main ]
+}
+
+build.dependsOn zip
 
