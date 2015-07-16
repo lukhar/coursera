@@ -51,7 +51,21 @@ public class Board {
     }
 
     public boolean isGoal() {
-        return false;
+        int expectedBlock = 1;
+
+        for (int i = 0; i < blocks.length; i++) {
+            for (int j = 0; j < blocks.length; j++) {
+                if (i == blocks.length - 1 && j == blocks.length - 1) {
+                    return blocks[i][j] == 0;
+                }
+                if (blocks[i][j] != expectedBlock) {
+                    return false;
+                }
+                expectedBlock++;
+            }
+        }
+
+        return true;
     }
 
     public Board twin() {

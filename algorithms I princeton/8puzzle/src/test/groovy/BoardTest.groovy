@@ -44,4 +44,13 @@ class BoardTest extends Specification {
         [[1, 2], [3, 0]] as int[][] | [[1, 2], [0, 3]] as int[][] | false
     }
 
+    def 'is board solved (final goal)'() {
+        expect:
+        assert new Board(blocks).isGoal() == isGoal
+
+        where:
+        blocks                                       | isGoal
+        [[1, 2, 3], [4, 5, 6], [7, 8, 0]] as int[][] | true
+        [[1, 0], [2, 3]] as int[][]                  | false
+    }
 }
