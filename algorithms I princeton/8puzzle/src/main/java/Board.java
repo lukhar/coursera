@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
     private final int[][] blocks;
 
     public Board(int[][] blocks) {
-        this.blocks = blocks;
+        this.blocks = copy(blocks);
     }
 
     public int dimension() {
@@ -74,6 +77,10 @@ public class Board {
 
     @Override
     public boolean equals(Object y) {
+        if (y == null) {
+            return false;
+        }
+
         if (this == y) {
             return true;
         }
@@ -95,12 +102,71 @@ public class Board {
     }
 
     public Iterable<Board> neighbors() {
-        return null;
+        int emptyRow = 0;
+        int emptyCol = 0;
+        for (int i = 0; i < blocks.length; i++) {
+            for (int j = 0; j < blocks.length; j++) {
+                if (blocks[i][j] == 0) {
+                    emptyRow = i;
+                    emptyCol = j;
+                    break;
+                }
+            }
+        }
+
+        List<Board> neighbours = new ArrayList<>();
+
+        if (emptyRow - 1 >= 0) {
+            int[][] neighbourBlocks = copy(blocks);
+            swap(neighbourBlocks, emptyRow, emptyCol, emptyRow - 1, emptyCol);
+            neighbours.add(new Board(neighbourBlocks));
+        }
+        if (emptyRow + 1 < blocks.length) {
+            int[][] neighbourBlocks = copy(blocks);
+            swap(neighbourBlocks, emptyRow, emptyCol, emptyRow + 1, emptyCol);
+            neighbours.add(new Board(neighbourBlocks));
+        }
+        if (emptyCol - 1 >= 0) {
+            int[][] neighbourBlocks = copy(blocks);
+            swap(neighbourBlocks, emptyRow, emptyCol, emptyRow, emptyCol - 1);
+            neighbours.add(new Board(neighbourBlocks));
+        }
+        if (emptyCol + 1 < blocks.length) {
+            int[][] neighbourBlocks = copy(blocks);
+            swap(neighbourBlocks, emptyRow, emptyCol, emptyRow, emptyCol + 1);
+            neighbours.add(new Board(neighbourBlocks));
+        }
+
+        return neighbours;
+    }
+
+    private void swap(int[][] neighbourBlocks, int fromRow,
+                      int fromCol, int toRow, int toCol) {
+        int temp = neighbourBlocks[fromRow][fromCol];
+        neighbourBlocks[fromRow][fromCol] = neighbourBlocks[toRow][toCol];
+        neighbourBlocks[toRow][toCol] = temp;
+    }
+
+    private int[][] copy(int[][] blocks) {
+        int[][] copy = new int[blocks.length][blocks.length];
+        for (int i = 0; i < blocks.length; i++) {
+            System.arraycopy(blocks[i], 0, copy[i], 0, blocks.length);
+        }
+
+        return copy;
     }
 
     @Override
     public String toString() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int[] block : blocks) {
+            for (int j = 0; j < blocks.length; j++) {
+                stringBuilder.append(block[j]).append("\t");
+            }
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
     }
 
     public static void main(String[] args) {

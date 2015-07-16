@@ -44,6 +44,11 @@ class BoardTest extends Specification {
         [[1, 2], [3, 0]] as int[][] | [[1, 2], [0, 3]] as int[][] | false
     }
 
+    def 'null equality'() {
+        expect:
+        assert !new Board([[]] as int[][]).equals(null)
+    }
+
     def 'is board solved (final goal)'() {
         expect:
         assert new Board(blocks).isGoal() == isGoal
@@ -52,5 +57,14 @@ class BoardTest extends Specification {
         blocks                                       | isGoal
         [[1, 2, 3], [4, 5, 6], [7, 8, 0]] as int[][] | true
         [[1, 0], [2, 3]] as int[][]                  | false
+    }
+
+    def 'compute neighbouring boards'() {
+        expect:
+        assert new Board(initial).neighbors().toSet() == [new Board(first), new Board(second)].toSet()
+
+        where:
+        initial                     | first                       | second
+        [[0, 1], [3, 2]] as int[][] | [[1, 0], [3, 2]] as int[][] | [[3, 1], [0, 2]] as int[][]
     }
 }
