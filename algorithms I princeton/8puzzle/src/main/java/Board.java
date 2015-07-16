@@ -10,11 +10,44 @@ public class Board {
     }
 
     public int hamming() {
-        return 0;
+        int expectedBlock = 1;
+        int distance = 0;
+
+        for (int i = 0; i < blocks.length; i++) {
+            for (int j = 0; j < blocks.length; j++) {
+                if (i == blocks.length - 1 && j == blocks.length - 1) {
+                    continue;
+                }
+                if (blocks[i][j] != expectedBlock) {
+                    distance++;
+                }
+                expectedBlock++;
+            }
+        }
+
+        return distance;
     }
 
     public int manhattan() {
-        return 0;
+        int distance = 0;
+
+        for (int i = 0; i < blocks.length; i++) {
+            for (int j = 0; j < blocks.length; j++) {
+                if (blocks[i][j] == 0) {
+                    continue;
+                }
+                distance += euclideanDistance(blocks[i][j], i, j);
+            }
+        }
+
+        return distance;
+    }
+
+    private int euclideanDistance(int block, int row, int col) {
+        int expectedRow = (block - 1) / blocks.length;
+        int expectedCol = (block - 1) % blocks.length;
+
+        return Math.abs(row - expectedRow) + Math.abs(col - expectedCol);
     }
 
     public boolean isGoal() {
