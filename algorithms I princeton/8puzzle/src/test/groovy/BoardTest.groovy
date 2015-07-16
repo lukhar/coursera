@@ -34,4 +34,14 @@ class BoardTest extends Specification {
          [7, 6, 5]] as int[][] | 10
     }
 
+    def 'board equality'() {
+        expect:
+        assert new Board(first).equals(new Board(second)) == equal
+
+        where:
+        first                       | second                      | equal
+        [[1, 2], [3, 0]] as int[][] | [[1, 2], [3, 0]] as int[][] | true
+        [[1, 2], [3, 0]] as int[][] | [[1, 2], [0, 3]] as int[][] | false
+    }
+
 }
