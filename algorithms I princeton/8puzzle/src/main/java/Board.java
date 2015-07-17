@@ -126,28 +126,32 @@ public class Board {
 
         List<Board> neighbours = new ArrayList<>();
 
-        if (emptyRow - 1 >= 0) {
+        if (isInRange(emptyRow - 1)) {
             int[][] neighbourBlocks = copy(blocks);
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow - 1, emptyCol);
             neighbours.add(new Board(neighbourBlocks));
         }
-        if (emptyRow + 1 < blocks.length) {
+        if (isInRange(emptyRow + 1) ) {
             int[][] neighbourBlocks = copy(blocks);
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow + 1, emptyCol);
             neighbours.add(new Board(neighbourBlocks));
         }
-        if (emptyCol - 1 >= 0) {
+        if (isInRange(emptyCol - 1)) {
             int[][] neighbourBlocks = copy(blocks);
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow, emptyCol - 1);
             neighbours.add(new Board(neighbourBlocks));
         }
-        if (emptyCol + 1 < blocks.length) {
+        if (isInRange(emptyCol + 1 )) {
             int[][] neighbourBlocks = copy(blocks);
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow, emptyCol + 1);
             neighbours.add(new Board(neighbourBlocks));
         }
 
         return neighbours;
+    }
+
+    private boolean isInRange(int coordinate) {
+        return coordinate >= 0 && coordinate < blocks.length;
     }
 
     private void swap(int[][] neighbourBlocks, int fromRow,
