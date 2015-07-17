@@ -39,9 +39,10 @@ class BoardTest extends Specification {
         assert new Board(first).equals(new Board(second)) == equal
 
         where:
-        first                       | second                      | equal
-        [[1, 2], [3, 0]] as int[][] | [[1, 2], [3, 0]] as int[][] | true
-        [[1, 2], [3, 0]] as int[][] | [[1, 2], [0, 3]] as int[][] | false
+        first                                        | second                      | equal
+        [[1, 2], [3, 0]] as int[][]                  | [[1, 2], [3, 0]] as int[][] | true
+        [[1, 2], [3, 0]] as int[][]                  | [[1, 2], [0, 3]] as int[][] | false
+        [[1, 2, 3], [4, 5, 6], [7, 8, 0]] as int[][] | [[1, 2], [0, 3]] as int[][] | false
     }
 
     def 'null equality'() {

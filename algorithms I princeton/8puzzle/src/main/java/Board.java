@@ -102,6 +102,10 @@ public class Board {
 
         Board that = (Board) y;
 
+        if (blocks.length != that.blocks.length) {
+            return false;
+        }
+
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks.length; j++) {
                 if (blocks[i][j] != that.blocks[i][j]) {

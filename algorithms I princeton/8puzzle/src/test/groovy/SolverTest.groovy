@@ -1,3 +1,4 @@
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class SolverTest extends Specification {
@@ -13,6 +14,17 @@ class SolverTest extends Specification {
         assert solution == [solvedBoard]
     }
 
+    def 'given solved board return correct number of moves'() {
+        given:
+        def solvedBoard = new Board([[1, 2], [3, 0]] as int[][])
+
+        when:
+        def moves = new Solver(solvedBoard).moves()
+
+        then:
+        assert moves == 0
+    }
+
     def 'given solvable board compute solution'() {
         given:
         def initialBoard = new Board([[0, 1, 3], [4, 2, 5], [7, 8, 6]] as int[][])
@@ -26,5 +38,14 @@ class SolverTest extends Specification {
                             new Board([[1, 2, 3], [4, 0, 5], [7, 8, 6]] as int[][]),
                             new Board([[1, 2, 3], [4, 5, 0], [7, 8, 6]] as int[][]),
                             new Board([[1, 2, 3], [4, 5, 6], [7, 8, 0]] as int[][])]
+    }
+
+    @Ignore
+    def 'given unsolvable board return null as solution'() {
+        expect:
+        assert new Solver(unsolvableBoard).solution() == null
+
+        where:
+        unsolvableBoard = new Board([[1, 2, 3], [4, 5, 6], [8, 7, 0]] as int[][])
     }
 }
