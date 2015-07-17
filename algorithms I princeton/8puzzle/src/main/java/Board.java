@@ -72,6 +72,16 @@ public class Board {
     }
 
     public Board twin() {
+        for (int i = 0;  i < blocks.length; i++) {
+            for (int j = 0; j < blocks.length - 1; j++) {
+                if (blocks[i][j] != 0 && blocks[i][j+1] != 0) {
+                    int[][] copy = copy(blocks);
+                    swap(copy, i, j, i, j+1);
+                    return new Board(copy);
+                }
+            }
+        }
+
         return null;
     }
 

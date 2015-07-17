@@ -46,7 +46,7 @@ class BoardTest extends Specification {
 
     def 'null equality'() {
         expect:
-        assert !new Board([[]] as int[][]).equals(null)
+        assert !new Board([[1, 2], [3, 0]] as int[][]).equals(null)
     }
 
     def 'is board solved (final goal)'() {
@@ -66,5 +66,15 @@ class BoardTest extends Specification {
         where:
         initial                     | first                       | second
         [[0, 1], [3, 2]] as int[][] | [[1, 0], [3, 2]] as int[][] | [[3, 1], [0, 2]] as int[][]
+    }
+
+    def 'create twin board'() {
+        expect:
+        assert new Board(initial).twin() == new Board(twin)
+
+        where:
+        initial                     | twin
+        [[1, 2], [3, 0]] as int[][] | [[2, 1], [3, 0]] as int[][]
+
     }
 }
