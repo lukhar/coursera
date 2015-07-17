@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 public class Board {
@@ -72,11 +73,11 @@ public class Board {
     }
 
     public Board twin() {
-        for (int i = 0;  i < blocks.length; i++) {
+        for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks.length - 1; j++) {
-                if (blocks[i][j] != 0 && blocks[i][j+1] != 0) {
+                if (blocks[i][j] != 0 && blocks[i][j + 1] != 0) {
                     int[][] copy = copy(blocks);
-                    swap(copy, i, j, i, j+1);
+                    swap(copy, i, j, i, j + 1);
                     return new Board(copy);
                 }
             }
@@ -131,7 +132,7 @@ public class Board {
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow - 1, emptyCol);
             neighbours.add(new Board(neighbourBlocks));
         }
-        if (isInRange(emptyRow + 1) ) {
+        if (isInRange(emptyRow + 1)) {
             int[][] neighbourBlocks = copy(blocks);
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow + 1, emptyCol);
             neighbours.add(new Board(neighbourBlocks));
@@ -141,7 +142,7 @@ public class Board {
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow, emptyCol - 1);
             neighbours.add(new Board(neighbourBlocks));
         }
-        if (isInRange(emptyCol + 1 )) {
+        if (isInRange(emptyCol + 1)) {
             int[][] neighbourBlocks = copy(blocks);
             swap(neighbourBlocks, emptyRow, emptyCol, emptyRow, emptyCol + 1);
             neighbours.add(new Board(neighbourBlocks));
@@ -161,10 +162,10 @@ public class Board {
         neighbourBlocks[toRow][toCol] = temp;
     }
 
-    private int[][] copy(int[][] blocks) {
-        int[][] copy = new int[blocks.length][blocks.length];
-        for (int i = 0; i < blocks.length; i++) {
-            System.arraycopy(blocks[i], 0, copy[i], 0, blocks.length);
+    private int[][] copy(int[][] original) {
+        int[][] copy = new int[original.length][original.length];
+        for (int i = 0; i < original.length; i++) {
+            System.arraycopy(original[i], 0, copy[i], 0, original.length);
         }
 
         return copy;
@@ -172,15 +173,16 @@ public class Board {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        Formatter formatter = new Formatter();
+        formatter.format("%d\n", blocks.length);
         for (int[] block : blocks) {
-            for (int j = 0; j < blocks.length; j++) {
-                stringBuilder.append(block[j]).append("\t");
+            for (int innerBlock : block) {
+                formatter.format("%4d", innerBlock);
             }
-            stringBuilder.append("\n");
+            formatter.format("\n");
         }
 
-        return stringBuilder.toString();
+        return formatter.toString();
     }
 
     public static void main(String[] args) {
