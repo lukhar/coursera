@@ -46,6 +46,7 @@ public class PuzzleChecker {
             Board initial = new Board(tiles);
             Solver solver = new Solver(initial);
             System.out.println(filename + ": " + solver.moves());
+            System.out.println(filename + ": " + solver.solution());
         }
     }
 }

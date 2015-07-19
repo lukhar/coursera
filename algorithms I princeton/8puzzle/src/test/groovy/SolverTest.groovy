@@ -40,12 +40,11 @@ class SolverTest extends Specification {
                             new Board([[1, 2, 3], [4, 5, 6], [7, 8, 0]] as int[][])]
     }
 
-    @Ignore
     def 'given unsolvable board return null as solution'() {
         expect:
         assert new Solver(unsolvableBoard).solution() == null
 
         where:
-        unsolvableBoard = new Board([[1, 2, 3], [4, 5, 6], [8, 7, 0]] as int[][])
+        unsolvableBoard = new Board([[1, 2, 3], [4, 6, 5], [7, 8, 0]] as int[][])
     }
 }

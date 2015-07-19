@@ -1,22 +1,28 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Solver {
 
-    private static final Comparator<Board> HAMMING = new Comparator<Board>() {
-        @Override
-        public int compare(Board o1, Board o2) {
-            return o1.hamming() - o2.hamming();
-        }
-    };
+    private static class SearchNode implements Comparable<SearchNode> {
+        private final int moves;
+        private final Board board;
+        private final SearchNode previous;
 
-    private static final Comparator<Board> MANHATTAN = new Comparator<Board>() {
-        @Override
-        public int compare(Board o1, Board o2) {
-            return o1.manhattan() - o2.manhattan();
+        public SearchNode(Board board, int moves, SearchNode previous) {
+            this.board = board;
+            this.moves = moves;
+            this.previous = previous;
         }
-    };
+
+        public int priority() {
+            return moves + board.manhattan();
+        }
+
+        @Override
+        public int compareTo(SearchNode that) {
+            return this.priority() - that.priority();
+        }
+    }
 
     private final List<Board> solution;
 
@@ -26,43 +32,50 @@ public class Solver {
 
     private List<Board> solve(Board initial) {
         Board twin = initial.twin();
-        List<Board> result = new ArrayList<>();
-        Board mainPrevious = null;
-        Board twinPrevious = null;
-        MinPQ<Board> mainQueue = new MinPQ<>(MANHATTAN);
-        MinPQ<Board> twinQueue = new MinPQ<>(MANHATTAN);
+        MinPQ<SearchNode> mainQueue = new MinPQ<>();
+        MinPQ<SearchNode> twinQueue = new MinPQ<>();
+        int moves = 0;
+        mainQueue.insert(new SearchNode(initial, moves, null));
+        twinQueue.insert(new SearchNode(twin, moves, null));
 
-        mainQueue.insert(initial);
-        twinQueue.insert(twin);
 
         while (true) {
-            Board mainSearch = mainQueue.delMin();
-            Board twinSearch = twinQueue.delMin();
-            result.add(mainSearch);
+            moves++;
+            SearchNode mainSearch = mainQueue.delMin();
+            SearchNode twinSearch = twinQueue.delMin();
 
-            if (mainSearch.isGoal()) {
-                return result;
+            if (mainSearch.board.isGoal()) {
+                return retraceSteps(mainSearch);
             }
 
-            if (twinSearch.isGoal()) {
+            if (twinSearch.board.isGoal()) {
                 return null;
             }
 
-            for (Board board : mainSearch.neighbors()) {
-                if (!board.equals(mainPrevious)) {
-                    mainQueue.insert(board);
+            for (Board board : mainSearch.board.neighbors()) {
+                SearchNode mainPrevious = mainSearch.previous;
+                if (mainPrevious == null || !board.equals(mainPrevious.board)) {
+                    mainQueue.insert(new SearchNode(board, moves, mainSearch));
                 }
             }
 
-            for (Board board : twinSearch.neighbors()) {
-                if (!board.equals(twinPrevious)) {
-                    twinQueue.insert(board);
+            for (Board board : twinSearch.board.neighbors()) {
+                SearchNode twinPrevious = twinSearch.previous;
+                if (twinPrevious == null || !board.equals(twinPrevious.board)) {
+                    twinQueue.insert(new SearchNode(board, moves, twinSearch));
                 }
             }
-
-            mainPrevious = mainSearch;
-            twinPrevious = twinSearch;
         }
+    }
+
+    private List<Board> retraceSteps(SearchNode searchNode) {
+        List<Board> result = new ArrayList<>();
+        SearchNode current = searchNode;
+        while (current != null) {
+            result.add(0, current.board);
+            current = current.previous;
+        }
+        return result;
     }
 
     public boolean isSolvable() {

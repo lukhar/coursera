@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Board {
     private final int[][] blocks;
+    private int manhattan = -1;
 
     public Board(int[][] blocks) {
         this.blocks = copy(blocks);
@@ -33,6 +34,10 @@ public class Board {
     }
 
     public int manhattan() {
+        if (manhattan != -1) {
+            return manhattan;
+        }
+
         int distance = 0;
 
         for (int i = 0; i < blocks.length; i++) {
@@ -43,6 +48,8 @@ public class Board {
                 distance += euclideanDistance(blocks[i][j], i, j);
             }
         }
+
+        manhattan = distance;
 
         return distance;
     }
