@@ -34,13 +34,11 @@ public class Solver {
         Board twin = initial.twin();
         MinPQ<SearchNode> mainQueue = new MinPQ<>();
         MinPQ<SearchNode> twinQueue = new MinPQ<>();
-        int moves = 0;
-        mainQueue.insert(new SearchNode(initial, moves, null));
-        twinQueue.insert(new SearchNode(twin, moves, null));
+        mainQueue.insert(new SearchNode(initial, 0, null));
+        twinQueue.insert(new SearchNode(twin, 0, null));
 
 
         while (true) {
-            moves++;
             SearchNode mainSearch = mainQueue.delMin();
             SearchNode twinSearch = twinQueue.delMin();
 
@@ -55,14 +53,16 @@ public class Solver {
             for (Board board : mainSearch.board.neighbors()) {
                 SearchNode mainPrevious = mainSearch.previous;
                 if (mainPrevious == null || !board.equals(mainPrevious.board)) {
-                    mainQueue.insert(new SearchNode(board, moves, mainSearch));
+                    mainQueue.insert(
+                        new SearchNode(board, mainSearch.moves + 1, mainSearch));
                 }
             }
 
             for (Board board : twinSearch.board.neighbors()) {
                 SearchNode twinPrevious = twinSearch.previous;
                 if (twinPrevious == null || !board.equals(twinPrevious.board)) {
-                    twinQueue.insert(new SearchNode(board, moves, twinSearch));
+                    twinQueue.insert(
+                        new SearchNode(board, twinSearch.moves + 1, twinSearch));
                 }
             }
         }
