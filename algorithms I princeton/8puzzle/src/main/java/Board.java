@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 public class Board {
@@ -184,16 +183,15 @@ public class Board {
 
     @Override
     public String toString() {
-        Formatter formatter = new Formatter();
-        formatter.format("%d\n", blocks.length);
+        StringBuilder builder = new StringBuilder();
+        builder.append(blocks.length).append("\n");
         for (int[] block : blocks) {
-            for (int innerBlock : block) {
-                formatter.format("%4d", innerBlock);
+            for (int j = 0; j < blocks.length; j++) {
+                builder.append(String.format("%2d ", block[j]));
             }
-            formatter.format("\n");
+            builder.append("\n");
         }
-
-        return formatter.toString();
+        return builder.toString();
     }
 
     public static void main(String[] args) {
