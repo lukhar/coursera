@@ -85,9 +85,32 @@ class PointSETTest extends Specification {
         range.containsAll(a, b)
 
         where:
-        a                       | b                     | c
-        new Point2D(3.0, 1.5)   | new Point2D(2.5, 2.0) | new Point2D(0.5, 2.0)
-        new Point2D(3.0, 1.5)   | new Point2D(4.0, 1.5) | new Point2D(1.5, 20.0)
-        new Point2D(1.0, 1.0)   | new Point2D(4.0, 2.0) | new Point2D(1.5, 20.0)
+        a                     | b                     | c
+        new Point2D(3.0, 1.5) | new Point2D(2.5, 2.0) | new Point2D(0.5, 2.0)
+        new Point2D(3.0, 1.5) | new Point2D(4.0, 1.5) | new Point2D(1.5, 20.0)
+        new Point2D(1.0, 1.0) | new Point2D(4.0, 2.0) | new Point2D(1.5, 20.0)
     }
+
+    def 'given set of points find nearest one'() {
+        given:
+        def points = new PointSET()
+
+        when:
+        points.insert(new Point2D(3.0, 1.5))
+        points.insert(new Point2D(19.3, 21.5))
+        points.insert(new Point2D(1.4, 1.3))
+
+        and:
+        def nearest = points.nearest(point)
+
+        then:
+        assert nearest == expected
+
+        where:
+        point                    | expected
+        new Point2D(4.0, 2.0)    | new Point2D(3.0, 1.5)
+        new Point2D(21.0, 112.0) | new Point2D(19.3, 21.5)
+        new Point2D(0.3, 0.7)    | new Point2D(1.4, 1.3)
+    }
+
 }

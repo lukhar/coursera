@@ -54,7 +54,17 @@ public class PointSET {
             throw new NullPointerException();
         }
 
-        return null;
+        Point2D nearestPoint = null;
+
+        double minDistance = Double.MAX_VALUE;
+        for (Point2D checkedPoint : points) {
+            double distance = checkedPoint.distanceTo(point);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestPoint = checkedPoint;
+            }
+        }
+        return nearestPoint;
     }
 
     public static void main(String[] args) {
