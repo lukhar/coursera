@@ -1,10 +1,9 @@
 /*************************************************************************
- *  Compilation:  javac RectHV.java
- *  Execution:    java RectHV
- *  Dependencies: Point2D.java
- *
- *  Implementation of 2D axis-aligned rectangle.
- *
+ * Compilation:  javac RectHV.java
+ * Execution:    java RectHV
+ * Dependencies: Point2D.java
+ * <p>
+ * Implementation of 2D axis-aligned rectangle.
  *************************************************************************/
 
 public final class RectHV {
