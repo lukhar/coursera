@@ -29,11 +29,11 @@ findbugs {
 task copy(type: Copy) {
     from 'src/main/java/KdTree.java'
     from 'src/main/java/PointSET.java'
-    into 'build/kdtrees'
+    into 'build/kdtree'
 }
 
 task zip(dependsOn: copy, type: Zip) {
-    from 'build/kdtrees'
+    from 'build/kdtree'
 }
 
 checkstyle {
