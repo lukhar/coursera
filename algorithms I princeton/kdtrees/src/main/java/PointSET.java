@@ -1,13 +1,19 @@
+import java.util.Set;
+import java.util.TreeSet;
+
 public class PointSET {
+    private final Set<Point2D> points;
+
     public PointSET() {
+        this.points = new TreeSet<>();
     }
 
     public boolean isEmpty() {
-        return false;
+        return points.size() == 0;
     }
 
     public int size() {
-        return -1;
+        return points.size();
     }
 
     public void insert(Point2D point) {

@@ -44,4 +44,13 @@ class PointSETTest extends Specification {
         then:
         thrown(NullPointerException)
     }
+
+    def 'new PointSET is empty'() {
+        expect:
+        assert pointSet.isEmpty()
+        assert pointSet.size() == 0
+
+        where:
+        pointSet = new PointSET();
+    }
 }
