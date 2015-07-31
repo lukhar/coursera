@@ -66,6 +66,7 @@ class PointSETTest extends Specification {
         initial                | point                  | isContaining
         new Point2D(0.5, 0.16) | new Point2D(0.5, 0.16) | true
         new Point2D(0.5, 0.16) | new Point2D(0.1, 0.3)  | false
-
     }
+
+
 }

@@ -29,7 +29,9 @@ public class PointSET {
     }
 
     public void draw() {
-
+        for (Point2D point : points) {
+            point.draw();
+        }
     }
 
     public Iterable<Point2D> range(RectHV rect) {
