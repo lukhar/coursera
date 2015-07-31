@@ -17,9 +17,7 @@ public class PointSET {
     }
 
     public void insert(Point2D point) {
-        if (point == null) {
-            throw new NullPointerException();
-        }
+        points.add(point);
     }
 
     public boolean contains(Point2D point) {
@@ -27,7 +25,7 @@ public class PointSET {
             throw new NullPointerException();
         }
 
-        return false;
+        return points.contains(point);
     }
 
     public void draw() {

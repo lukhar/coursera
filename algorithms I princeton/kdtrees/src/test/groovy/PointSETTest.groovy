@@ -53,4 +53,19 @@ class PointSETTest extends Specification {
         where:
         pointSet = new PointSET();
     }
+
+    def 'given points inside verify contains method'() {
+        given:
+        def points = new PointSET()
+
+        expect:
+        points.insert(initial)
+        points.contains(point) == isContaining
+
+        where:
+        initial                | point                  | isContaining
+        new Point2D(0.5, 0.16) | new Point2D(0.5, 0.16) | true
+        new Point2D(0.5, 0.16) | new Point2D(0.1, 0.3)  | false
+
+    }
 }
