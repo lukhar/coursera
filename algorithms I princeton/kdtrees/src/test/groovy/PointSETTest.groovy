@@ -57,9 +57,9 @@ class PointSETTest extends Specification {
     def 'given points inside verify contains method'() {
         given:
         def points = new PointSET()
+        points.insert(initial)
 
         expect:
-        points.insert(initial)
         points.contains(point) == isContaining
 
         where:
@@ -68,5 +68,26 @@ class PointSETTest extends Specification {
         new Point2D(0.5, 0.16) | new Point2D(0.1, 0.3)  | false
     }
 
+    def 'given set of points and rectangle return points inside of rectangle'() {
+        given:
+        def points = new PointSET()
+        def rectangle = new RectHV(1.0, 1.0, 4.0, 2.0)
 
+        when:
+        points.insert(a)
+        points.insert(b)
+        points.insert(c)
+
+        and:
+        def range = points.range(rectangle)
+
+        then:
+        range.containsAll(a, b)
+
+        where:
+        a                       | b                     | c
+        new Point2D(3.0, 1.5)   | new Point2D(2.5, 2.0) | new Point2D(0.5, 2.0)
+        new Point2D(3.0, 1.5)   | new Point2D(4.0, 1.5) | new Point2D(1.5, 20.0)
+        new Point2D(1.0, 1.0)   | new Point2D(4.0, 2.0) | new Point2D(1.5, 20.0)
+    }
 }

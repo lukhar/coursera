@@ -39,7 +39,14 @@ public class PointSET {
             throw new NullPointerException();
         }
 
-        return null;
+        TreeSet<Point2D> range = new TreeSet<>();
+        for (Point2D point : points) {
+            if (rect.contains(point)) {
+                range.add(point);
+            }
+        }
+
+        return range;
     }
 
     public Point2D nearest(Point2D point) {
