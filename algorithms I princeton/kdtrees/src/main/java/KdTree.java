@@ -5,13 +5,13 @@ public class KdTree {
 
     private static class Node {
         private Point2D point;
-        private boolean compareX;
+        private boolean compareHorizontal;
         private Node left = null;
         private Node right = null;
 
-        public Node(Point2D point, boolean compareX) {
+        public Node(Point2D point, boolean compareHorizontal) {
             this.point = point;
-            this.compareX = compareX;
+            this.compareHorizontal = compareHorizontal;
         }
     }
 
@@ -19,7 +19,7 @@ public class KdTree {
     }
 
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     public int size() {
@@ -44,16 +44,16 @@ public class KdTree {
     }
 
     private void insert(Node parent, Point2D point) {
-        if (parent.compareX) {
+        if (parent.compareHorizontal) {
             if (point.x() < parent.point.x()) {
                 if (parent.left == null) {
-                    parent.left = new Node(point, !parent.compareX);
+                    parent.left = new Node(point, !parent.compareHorizontal);
                     size++;
                 } else {
                     insert(parent.left, point);
                 }
             } else if (parent.right == null) {
-                parent.right = new Node(point, !parent.compareX);
+                parent.right = new Node(point, !parent.compareHorizontal);
                 size++;
             } else {
                 insert(parent.right, point);
@@ -61,13 +61,13 @@ public class KdTree {
         } else {
             if (point.y() < parent.point.y()) {
                 if (parent.left == null) {
-                    parent.left = new Node(point, !parent.compareX);
+                    parent.left = new Node(point, !parent.compareHorizontal);
                     size++;
                 } else {
                     insert(parent.left, point);
                 }
             } else if (parent.right == null) {
-                parent.right = new Node(point, !parent.compareX);
+                parent.right = new Node(point, !parent.compareHorizontal);
                 size++;
             } else {
                 insert(parent.right, point);
@@ -90,7 +90,7 @@ public class KdTree {
         if (parent.point.equals(point)) {
             return true;
         }
-        if (parent.compareX) {
+        if (parent.compareHorizontal) {
             if (point.x() < parent.point.x()) {
                 return contains(parent.left, point);
             } else {
@@ -106,7 +106,17 @@ public class KdTree {
     }
 
     public void draw() {
+        draw(root);
+    }
 
+    private void draw(Node node) {
+        if (node == null) {
+            return;
+        }
+        node.point.draw();
+
+        draw(node.left);
+        draw(node.right);
     }
 
     public Iterable<Point2D> range(RectHV rect) {

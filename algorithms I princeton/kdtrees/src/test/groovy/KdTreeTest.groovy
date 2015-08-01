@@ -103,4 +103,9 @@ class KdTreeTest extends Specification {
         then:
         assert points.size() == 1
     }
+
+    def 'given new KdTree is empty'() {
+        expect:
+        assert new KdTree().isEmpty()
+    }
 }
