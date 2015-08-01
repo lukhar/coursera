@@ -76,4 +76,31 @@ class KdTreeTest extends Specification {
         assert points.contains(b)
         assert points.contains(c)
     }
+
+    def 'given multiple points inserted compute size'() {
+        given:
+        def points = new KdTree()
+
+        when:
+        points.insert(new Point2D(-0.5, 12))
+        points.insert(new Point2D(8.5, -4.5))
+        points.insert(new Point2D(3.2, 1.5))
+
+        then:
+        assert points.size() == 3
+    }
+
+    def 'given same point inserted several time do not increase size'() {
+        given:
+        def points = new KdTree()
+        def samePoint = new Point2D(-0.5, 12)
+
+        when:
+        points.insert(samePoint)
+        points.insert(samePoint)
+        points.insert(samePoint)
+
+        then:
+        assert points.size() == 1
+    }
 }

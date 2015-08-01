@@ -1,6 +1,7 @@
 public class KdTree {
 
-    private Node root;
+    private Node root = null;
+    private int size = 0;
 
     private static class Node {
         private Point2D point;
@@ -22,7 +23,7 @@ public class KdTree {
     }
 
     public int size() {
-        return -1;
+        return size;
     }
 
     public void insert(Point2D point) {
@@ -32,6 +33,11 @@ public class KdTree {
 
         if (root == null) {
             root = new Node(point, true);
+            size++;
+        }
+
+        if (contains(point)) {
+            return;
         }
 
         insert(root, point);
@@ -42,11 +48,13 @@ public class KdTree {
             if (point.x() < parent.point.x()) {
                 if (parent.left == null) {
                     parent.left = new Node(point, !parent.compareX);
+                    size++;
                 } else {
                     insert(parent.left, point);
                 }
             } else if (parent.right == null) {
                 parent.right = new Node(point, !parent.compareX);
+                size++;
             } else {
                 insert(parent.right, point);
             }
@@ -54,11 +62,13 @@ public class KdTree {
             if (point.y() < parent.point.y()) {
                 if (parent.left == null) {
                     parent.left = new Node(point, !parent.compareX);
+                    size++;
                 } else {
                     insert(parent.left, point);
                 }
             } else if (parent.right == null) {
                 parent.right = new Node(point, !parent.compareX);
+                size++;
             } else {
                 insert(parent.right, point);
             }
@@ -83,15 +93,13 @@ public class KdTree {
         if (parent.compareX) {
             if (point.x() < parent.point.x()) {
                 return contains(parent.left, point);
-            }
-            else {
+            } else {
                 return contains(parent.right, point);
             }
         } else {
             if (point.y() < parent.point.y()) {
                 return contains(parent.left, point);
-            }
-            else {
+            } else {
                 return contains(parent.right, point);
             }
         }
