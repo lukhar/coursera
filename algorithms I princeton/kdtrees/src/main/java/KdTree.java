@@ -31,16 +31,17 @@ public class KdTree {
             throw new NullPointerException();
         }
 
-        if (root == null) {
-            root = new Node(point, true);
-            size++;
-        }
-
         if (contains(point)) {
             return;
         }
 
-        insert(root, point);
+        if (root == null) {
+            root = new Node(point, true);
+        }
+        else {
+            insert(root, point);
+        }
+        size++;
     }
 
     private void insert(Node parent, Point2D point) {
@@ -48,13 +49,11 @@ public class KdTree {
             if (point.x() < parent.point.x()) {
                 if (parent.left == null) {
                     parent.left = new Node(point, !parent.compareHorizontal);
-                    size++;
                 } else {
                     insert(parent.left, point);
                 }
             } else if (parent.right == null) {
                 parent.right = new Node(point, !parent.compareHorizontal);
-                size++;
             } else {
                 insert(parent.right, point);
             }
@@ -62,13 +61,11 @@ public class KdTree {
             if (point.y() < parent.point.y()) {
                 if (parent.left == null) {
                     parent.left = new Node(point, !parent.compareHorizontal);
-                    size++;
                 } else {
                     insert(parent.left, point);
                 }
             } else if (parent.right == null) {
                 parent.right = new Node(point, !parent.compareHorizontal);
-                size++;
             } else {
                 insert(parent.right, point);
             }
