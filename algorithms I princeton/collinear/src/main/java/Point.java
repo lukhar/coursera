@@ -9,6 +9,8 @@
  * Description: An immutable data type for points in the plane.
  *************************************************************************/
 
+import edu.princeton.cs.algs4.StdDraw;
+
 import java.util.Comparator;
 
 public class Point implements Comparable<Point> {

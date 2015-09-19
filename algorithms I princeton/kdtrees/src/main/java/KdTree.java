@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.Point2D;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -40,8 +42,7 @@ public class KdTree {
 
         if (root == null) {
             root = new Node(point, true);
-        }
-        else {
+        } else {
             insert(root, point);
         }
         size++;
@@ -166,7 +167,40 @@ public class KdTree {
             throw new NullPointerException();
         }
 
-        return null;
+        if (root == null) {
+            return null;
+        }
+
+        return nearest(root, point, root.point);
+    }
+
+    private Point2D nearest(Node node, Point2D point, Point2D nearest) {
+        if (node == null) {
+            return nearest;
+        }
+
+        double ldist = Double.MAX_VALUE;
+        double rdist = Double.MAX_VALUE;
+        Point2D newNearest = nearest;
+
+        if (node.left != null) {
+            ldist = point.distanceTo(node.left.point);
+            if (ldist < nearest.distanceTo(point)) {
+                newNearest = node.left.point;
+            }
+        }
+        if (node.right != null) {
+            rdist = point.distanceTo(node.right.point);
+            if (rdist < nearest.distanceTo(point)) {
+                newNearest = node.right.point;
+            }
+        }
+
+        if (ldist < rdist) {
+            return nearest(node.left, point, newNearest);
+        } else {
+            return nearest(node.right, point, newNearest);
+        }
     }
 
     public static void main(String[] args) {

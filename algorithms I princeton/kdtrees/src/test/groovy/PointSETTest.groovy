@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.Point2D
 import spock.lang.Specification
 
 class PointSETTest extends Specification {

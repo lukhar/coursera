@@ -1,3 +1,7 @@
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
+
 public class PercolationStats {
 
     private final double[] stats;
@@ -44,9 +48,7 @@ public class PercolationStats {
         }
     }
 
-    public double mean() {
-        return StdStats.mean(stats);
-    }
+    public double mean() { return StdStats.mean(stats); }
 
     public double stddev() {
         return StdStats.stddev(stats);
