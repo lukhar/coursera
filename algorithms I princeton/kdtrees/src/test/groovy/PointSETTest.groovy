@@ -64,9 +64,9 @@ class PointSETTest extends Specification {
         points.contains(point) == isContaining
 
         where:
-        initial                | point                  | isContaining
-        new Point2D(0.5, 0.16) | new Point2D(0.5, 0.16) | true
-        new Point2D(0.5, 0.16) | new Point2D(0.1, 0.3)  | false
+        initial          | point            | isContaining
+        point(0.5, 0.16) | point(0.5, 0.16) | true
+        point(0.5, 0.16) | point(0.1, 0.3)  | false
     }
 
     def 'given set of points and rectangle return points inside of rectangle'() {
@@ -86,10 +86,10 @@ class PointSETTest extends Specification {
         range.containsAll(a, b)
 
         where:
-        a                     | b                     | c
-        new Point2D(3.0, 1.5) | new Point2D(2.5, 2.0) | new Point2D(0.5, 2.0)
-        new Point2D(3.0, 1.5) | new Point2D(4.0, 1.5) | new Point2D(1.5, 20.0)
-        new Point2D(1.0, 1.0) | new Point2D(4.0, 2.0) | new Point2D(1.5, 20.0)
+        a               | b               | c
+        point(3.0, 1.5) | point(2.5, 2.0) | point(0.5, 2.0)
+        point(3.0, 1.5) | point(4.0, 1.5) | point(1.5, 20.0)
+        point(1.0, 1.0) | point(4.0, 2.0) | point(1.5, 20.0)
     }
 
     def 'given set of points find nearest one'() {
@@ -97,9 +97,9 @@ class PointSETTest extends Specification {
         def points = new PointSET()
 
         when:
-        points.insert(new Point2D(3.0, 1.5))
-        points.insert(new Point2D(19.3, 21.5))
-        points.insert(new Point2D(1.4, 1.3))
+        points.insert(point(3.0, 1.5))
+        points.insert(point(19.3, 21.5))
+        points.insert(point(1.4, 1.3))
 
         and:
         def nearest = points.nearest(point)
@@ -108,10 +108,13 @@ class PointSETTest extends Specification {
         assert nearest == expected
 
         where:
-        point                    | expected
-        new Point2D(4.0, 2.0)    | new Point2D(3.0, 1.5)
-        new Point2D(21.0, 112.0) | new Point2D(19.3, 21.5)
-        new Point2D(0.3, 0.7)    | new Point2D(1.4, 1.3)
+        point              | expected
+        point(4.0, 2.0)    | point(3.0, 1.5)
+        point(21.0, 112.0) | point(19.3, 21.5)
+        point(0.3, 0.7)    | point(1.4, 1.3)
     }
 
+    def Point2D point(double x, double y) {
+        return new Point2D(x, y)
+    }
 }
