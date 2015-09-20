@@ -33,3 +33,13 @@ def weighted_union(sequence, transformations):
             size[pp] += size[pq]
 
     return sequence
+
+
+if __name__ == '__main__':
+    import sys
+
+    sequence = [i for i in range(10)]
+    transformations = parse(sys.argv[1])
+
+    print 'quick union: ', ' '.join(str(elem) for elem in quick_union(sequence, transformations))
+    print 'weighted union: ', ' '.join(str(elem) for elem in weighted_union(sequence, transformations))
