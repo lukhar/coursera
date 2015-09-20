@@ -1,6 +1,4 @@
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
@@ -8,31 +6,24 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class DequeTest {
 
     @Test
-    public void shouldHaveZeroSizeAfterCreation() {
-        assertThat(new Deque<>().size()).isEqualTo(0);
-    }
-
-    @Test
-    public void shouldBeEmptyAfterCreation() {
-        assertThat(new Deque<>().isEmpty()).isTrue();
+    public void newDequeIsEmptyAndHasSizeZero() {
+        assertThat(new Deque<>()).hasSize(0).isEmpty();
     }
 
     @Test
     public void shouldIncreaseSizeAfterAddingNewElement() {
         // given
         int anyItem = 0;
-        Deque<Integer> Deque = new Deque<>();
+        Deque<Integer> deque = new Deque<>();
 
         // when
-        Deque.addLast(anyItem);
+        deque.addLast(anyItem);
 
         // then
-        assertThat(Deque.isEmpty()).isFalse();
-        assertThat(Deque.size()).isEqualTo(1);
+        assertThat(deque).isNotEmpty().hasSize(1);
     }
 
     @Test
@@ -73,9 +64,8 @@ public class DequeTest {
         String elem = strings.removeFirst();
 
         // then
-        assertThat(strings.isEmpty()).isTrue();
-        assertThat(strings.size()).isEqualTo(0);
         assertThat(elem).isEqualTo("one");
+        assertThat(strings).isEmpty();
     }
 
     @Test
@@ -89,7 +79,7 @@ public class DequeTest {
         fullDeque.addFirst("C");
 
         // then
-        assertThat(fullDeque.size()).isEqualTo(3);
+        assertThat(fullDeque).hasSize(3);
     }
 
     @Test
@@ -128,16 +118,16 @@ public class DequeTest {
         strings.addLast("two");
 
         // when
-        List<String> output = Arrays.asList(strings.removeLast(), strings.removeLast());
+        List<String> lastTwoElements = Arrays.asList(strings.removeLast(), strings.removeLast());
         strings.addFirst("zero");
 
         // then
-        assertThat(output).containsExactly("two", "one");
-        assertThat(strings.size()).isEqualTo(1);
+        assertThat(lastTwoElements).containsExactly("two", "one");
+        assertThat(strings).hasSize(1);
     }
 
     @Test
-    public void shouldLastElementShouldBeSameAsFirstWhenDequeHasOnlyOneItem() {
+    public void lastElementShouldBeSameAsFirstWhenDequeHasOnlyOneItem() {
         // given
         Deque<String> strings = new Deque<>();
         strings.addFirst("one");
@@ -154,10 +144,9 @@ public class DequeTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenInvokingRemoveOnIterator() {
+    public void throwExceptionWhenInvokingRemoveOnIterator() {
         // given
-        Deque<Object> objects = new Deque<>();
-        Iterator<Object> iterator = objects.iterator();
+        Iterator<Object> iterator = new Deque<>().iterator();
 
         // when
         when(iterator).remove();
@@ -187,7 +176,7 @@ public class DequeTest {
     }
 
     @Test
-    public void shouldThrowNoSuchElementException() {
+    public void givenEmptyCollectionIteratorThrowNoSuchElementExceptionWhenNextItemIsRequested() {
         // given
         Deque emptyDeque = new Deque();
         Iterator iterator = emptyDeque.iterator();

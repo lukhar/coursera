@@ -98,7 +98,7 @@ class PercolationTest extends Specification {
         when: 'neighbour of #x, #y is open'
         percolation.open(nx, ny)
 
-        then: 'neighbour of #x, #y is full'
+        then: 'neighbour of #x, #y is not full'
         !percolation.isFull(nx, ny)
 
         where:

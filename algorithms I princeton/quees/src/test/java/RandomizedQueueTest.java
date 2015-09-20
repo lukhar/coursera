@@ -1,6 +1,4 @@
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,17 +9,11 @@ import static com.googlecode.catchexception.CatchException.caughtException;
 import static com.googlecode.catchexception.apis.CatchExceptionBdd.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class RandomizedQueueTest {
-    @Test
-    public void shouldHaveZeroSizeAfterCreation() {
-        assertThat(new RandomizedQueue<>().size()).isEqualTo(0);
-    }
-
 
     @Test
-    public void shouldBeEmptyAfterCreation() {
-        assertThat(new RandomizedQueue<>().isEmpty()).isTrue();
+    public void newQueueShouldBeEmptyAndHaveZeroSize() {
+        assertThat(new RandomizedQueue<>()).hasSize(0).isEmpty();
     }
 
     @Test
@@ -34,8 +26,7 @@ public class RandomizedQueueTest {
         randomizedQueue.enqueue(anyItem);
 
         // then
-        assertThat(randomizedQueue.isEmpty()).isFalse();
-        assertThat(randomizedQueue.size()).isEqualTo(1);
+        assertThat(randomizedQueue).hasSize(1).isNotEmpty();
     }
 
     @Test
@@ -90,8 +81,7 @@ public class RandomizedQueueTest {
         String elem = strings.dequeue();
 
         // then
-        assertThat(strings.isEmpty()).isTrue();
-        assertThat(strings.size()).isEqualTo(0);
+        assertThat(strings).hasSize(0).isEmpty();
         assertThat(elem).isEqualTo("one");
     }
 
@@ -111,7 +101,7 @@ public class RandomizedQueueTest {
         }
 
         // then
-        assertThat(strings.isEmpty()).isTrue();
+        assertThat(strings).isEmpty();
     }
 
     @Test
@@ -160,6 +150,7 @@ public class RandomizedQueueTest {
             .isInstanceOf(NoSuchElementException.class)
             .hasNoCause();
     }
+
     @Test
     public void givenQueueIteratorRaiseExceptionOnIteration() {
         // given
