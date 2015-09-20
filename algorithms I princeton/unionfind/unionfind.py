@@ -13,12 +13,11 @@ def quick_union(sequence, transformations):
 
 
 def weighted_union(sequence, transformations):
-    size = [1 for _ in sequence]
+    size = [1] * len(sequence)
 
     def root(ident):
         while sequence[ident] != ident:
             ident = sequence[ident]
-
         return ident
 
     for p, q in transformations:
@@ -38,8 +37,7 @@ def weighted_union(sequence, transformations):
 if __name__ == '__main__':
     import sys
 
-    sequence = [i for i in range(10)]
     transformations = parse(sys.argv[1])
 
-    print 'quick union: ', ' '.join(str(elem) for elem in quick_union(sequence, transformations))
-    print 'weighted union: ', ' '.join(str(elem) for elem in weighted_union(sequence, transformations))
+    print 'quick union: ', ' '.join(str(elem) for elem in quick_union(range(10), transformations))
+    print 'weighted union: ', ' '.join(str(elem) for elem in weighted_union(range(10), transformations))
