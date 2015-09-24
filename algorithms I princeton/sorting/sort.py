@@ -18,7 +18,71 @@ def insertion_sort(sequence, delimeter):
     return sequence
 
 
+def merge(sequence, lo, mid, hi):
+    aux = list(sequence)
+    i, j, k = lo, mid + 1, lo
+
+    while k <= hi:
+        if i > mid:
+            sequence[k] = aux[j]
+            j += 1
+        elif j > hi:
+            sequence[k] = aux[i]
+            i += 1
+        elif aux[i] < aux[j]:
+            sequence[k] = aux[i]
+            i += 1
+        else:
+            sequence[k] = aux[j]
+            j += 1
+        k += 1
+
+    return sequence
+
+
+def top_down_mergesort(sequence, delimeter):
+
+    counter = {'merges': 0}
+
+    def sort(sequence, lo, hi):
+        if lo >= hi:
+            return sequence
+
+        mid = lo + (hi - lo) / 2
+        sort(sequence, lo, mid)
+        sort(sequence, mid + 1, hi)
+
+        if counter['merges'] == delimeter:
+            return sequence
+        else:
+            merge(sequence, lo, mid, hi)
+            counter['merges'] += 1
+
+        return sequence
+
+    return sort(sequence, 0, len(sequence) - 1)
+
+
+def bottom_up_mergesort(sequence, delimeter):
+    lo, sz = 0, 1
+    counter = 0
+
+    while sz < len(sequence):
+        lo = 0
+        while lo < len(sequence) - sz:
+            if counter == delimeter:
+                return sequence
+
+            merge(sequence, lo, lo + sz - 1, min(lo + sz + sz - 1, len(sequence) - 1))
+            counter += 1
+            lo += (sz + sz)
+        sz += 1
+
+    return sequence
+
 if __name__ == '__main__':
     import sys
     sequence = [int(val) for val in sys.argv[1:]]
-    print 'insertion sort:',  ' '.join(str(val) for val in insertion_sort(sequence, delimeter=6))
+    print 'insertion sort:       ', ' '.join(str(val) for val in insertion_sort(list(sequence), delimeter=4))
+    print 'top-down merge sort:  ', ' '.join(str(val) for val in top_down_mergesort(list(sequence), delimeter=7))
+    print 'bottom-up merge sort: ', ' '.join(str(val) for val in bottom_up_mergesort(list(sequence), delimeter=7))
