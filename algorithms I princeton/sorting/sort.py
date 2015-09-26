@@ -88,18 +88,18 @@ class MergeSort(object):
 
 
 def partition(sequence, lo, hi):
-    i, j = lo + 1, hi
+    i, j = lo, hi + 1
     pivot = sequence[lo]
 
     while True:
-        while pivot > sequence[i]:
-            if i == hi:
-                break
+        while True:
             i += 1
-        while pivot < sequence[j]:
-            if j == lo:
+            if i == hi or pivot <= sequence[i]:
                 break
+        while True:
             j -= 1
+            if j == lo or pivot >= sequence[j]:
+                break
         if i >= j:
             break
 
