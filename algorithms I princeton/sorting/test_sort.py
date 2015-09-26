@@ -23,11 +23,5 @@ def test_partially_sort_sequence_using_bottom_up_merge_sort():
         [43, 51, 76, 90, 41, 57, 68, 73, 84, 99])
 
 
-def test_merge_two_lists():
-    assert_equal(
-        MergeSort.merge([1, 3, 7, 2, 5, 6], lo=0, mid=2, hi=5),
-        [1, 2, 3, 5, 6, 7])
-
-
 def test_partition():
     assert_equal(partition([5, 4, 2, 11, 10], lo=0, hi=4), [2, 4, 5, 11, 10])

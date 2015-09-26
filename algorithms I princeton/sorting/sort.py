@@ -5,15 +5,14 @@ def insertion_sort(sequence, delimeter):
     counter = 0
     for i in range(1, len(sequence)):
         for j in reversed(range(i)):
-            if sequence[j] > sequence[j + 1]:
-                sequence[j], sequence[j + 1] = sequence[j + 1], sequence[j]
-
-                counter += 1
-
-                if counter == delimeter:
-                    return sequence
-            else:
+            if sequence[j] <= sequence[j + 1]:
                 break
+            sequence[j], sequence[j + 1] = sequence[j + 1], sequence[j]
+
+            counter += 1
+
+            if counter == delimeter:
+                return sequence
 
     return sequence
 
@@ -23,29 +22,25 @@ class MergeSort(object):
     _buffer = []
 
     @classmethod
-    def merge(cls, sequence, lo, mid, hi):
-        if len(cls._buffer) != len(sequence):
-            cls._buffer = list(sequence)
-        else:
-            for i in xrange(len(sequence)):
-                cls._buffer[i] = sequence[i]
+    def _merge(cls, sequence, lo, mid, hi):
+        for i in xrange(len(sequence)):
+            cls._buffer[i] = sequence[i]
 
-        i, j, k = lo, mid + 1, lo
+        l, r, k = lo, mid + 1, lo
 
-        while k <= hi:
-            if i > mid:
-                sequence[k] = cls._buffer[j]
-                j += 1
-            elif j > hi:
-                sequence[k] = cls._buffer[i]
-                i += 1
-            elif cls._buffer[i] < cls._buffer[j]:
-                sequence[k] = cls._buffer[i]
-                i += 1
+        for k in xrange(lo, hi+1):
+            if l > mid:
+                sequence[k] = cls._buffer[r]
+                r += 1
+            elif r > hi:
+                sequence[k] = cls._buffer[l]
+                l += 1
+            elif cls._buffer[l] < cls._buffer[r]:
+                sequence[k] = cls._buffer[l]
+                l += 1
             else:
-                sequence[k] = cls._buffer[j]
-                j += 1
-            k += 1
+                sequence[k] = cls._buffer[r]
+                r += 1
 
         return sequence
 
@@ -65,9 +60,9 @@ class MergeSort(object):
 
             if counter['merges'] == delimeter:
                 return sequence
-            else:
-                cls.merge(sequence, lo, mid, hi)
-                counter['merges'] += 1
+
+            cls._merge(sequence, lo, mid, hi)
+            counter['merges'] += 1
 
             return sequence
 
@@ -84,7 +79,7 @@ class MergeSort(object):
                 if counter == delimeter:
                     return sequence
 
-                cls.merge(sequence, lo, lo + sz - 1, min(lo + sz + sz - 1, len(sequence) - 1))
+                cls._merge(sequence, lo, lo + sz - 1, min(lo + sz + sz - 1, len(sequence) - 1))
                 counter += 1
                 lo += (sz + sz)
             sz += 1
