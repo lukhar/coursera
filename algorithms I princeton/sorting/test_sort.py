@@ -1,5 +1,5 @@
 from nose.tools import assert_equal
-from sort import insertion_sort, top_down_mergesort, merge, bottom_up_mergesort
+from sort import insertion_sort, top_down_mergesort, merge, bottom_up_mergesort, partition
 
 
 def test_given_sequnce_and_delimiter_n_return_subsorted_seq_after_n_exchanges():
@@ -19,3 +19,10 @@ def test_partially_sort_sequence_using_bottom_up_merge_sort():
 
 def test_merge_two_lists():
     assert_equal(merge([1, 3, 7, 2, 5, 6], lo=0, mid=2, hi=5), [1, 2, 3, 5, 6, 7])
+
+
+def test_partition():
+    assert_equal(partition([5, 4, 2, 11, 10], lo=0, hi=4), [2, 4, 5, 11, 10])
+    assert_equal(partition(['K', 'R', 'A', 'T', 'E', 'L', 'E', 'P', 'U', 'I', 'M', 'Q', 'C', 'X', 'O', 'S'],
+                           lo=0, hi=15),
+                 ['E', 'C', 'A', 'I', 'E', 'K', 'L', 'P', 'U', 'T', 'M', 'Q', 'R', 'X', 'O', 'S'])

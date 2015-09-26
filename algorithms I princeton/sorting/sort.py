@@ -80,9 +80,33 @@ def bottom_up_mergesort(sequence, delimeter):
 
     return sequence
 
+
+def partition(sequence, lo, hi):
+    i, j = lo + 1, hi
+    pivot = sequence[lo]
+
+    while True:
+        while pivot > sequence[i]:
+            if i == hi:
+                break
+            i += 1
+        while pivot < sequence[j]:
+            if j == lo:
+                break
+            j -= 1
+        if i >= j:
+            break
+
+        sequence[i], sequence[j] = sequence[j], sequence[i]
+
+    sequence[lo], sequence[j] = sequence[j], sequence[lo]
+
+    return sequence
+
 if __name__ == '__main__':
     import sys
     sequence = [int(val) for val in sys.argv[1:]]
     print 'insertion sort:       ', ' '.join(str(val) for val in insertion_sort(list(sequence), delimeter=4))
     print 'top-down merge sort:  ', ' '.join(str(val) for val in top_down_mergesort(list(sequence), delimeter=7))
     print 'bottom-up merge sort: ', ' '.join(str(val) for val in bottom_up_mergesort(list(sequence), delimeter=7))
+    print 'partition two-way     ', ' '.join(str(val) for val in partition(list(sequence), lo=0, hi=len(sequence) - 1))
