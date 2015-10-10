@@ -4,12 +4,26 @@ import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
-public class Brute {
+public class BruteCollinearPoints {
 
     private static final int MIN_SIZE = 4;
+
+    private final Point[] points;
+    private List<LineSegment> segments = new ArrayList<>();
+
+    public BruteCollinearPoints(Point[] points) {
+        if (points == null) {
+            throw new NullPointerException();
+        }
+
+        if (hasDuplicates(points)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.points = points.clone();
+    }
 
     public static void main(String[] args) {
         Point[] points = Input.readPoints(args[0]);
@@ -18,14 +32,23 @@ public class Brute {
             return;
         }
 
-        List<List<Point>> collinear = new Brute().collinear(points);
-
+        LineSegment[] collinear = new BruteCollinearPoints(points).segments();
 
         Output.printPoints(collinear);
         Output.drawPoints(points);
         Output.drawLines(collinear);
     }
 
+    private boolean hasDuplicates(Point[] elements) {
+        Arrays.sort(elements);
+        for (int i = 1; i < elements.length; i++) {
+            if (elements[i - 1].compareTo(elements[i]) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private static boolean sameSlope(Point ref, Point... points) {
         if (points == null || points.length == 0) {
@@ -42,9 +65,8 @@ public class Brute {
         return true;
     }
 
-    private List<List<Point>> collinear(Point[] points) {
-        List<List<Point>> collinear = new ArrayList<>();
-
+    public LineSegment[] segments() {
+        segments = new ArrayList<>();
 
         Arrays.sort(points);
 
@@ -53,16 +75,18 @@ public class Brute {
                 for (int k = j + 1; k < points.length; k++) {
                     for (int l = k + 1; l < points.length; l++) {
                         if (sameSlope(points[i], points[j], points[k], points[l])) {
-                            collinear.add(
-                                Arrays.asList(
-                                    points[i], points[j], points[k], points[l]));
+                            segments.add(new LineSegment(points[i], points[l]));
                         }
                     }
                 }
             }
         }
 
-        return collinear;
+        return segments.toArray(new LineSegment[segments.size()]);
+    }
+
+    public int numberOfSegments() {
+       return segments.size();
     }
 
     private static class Input {
@@ -95,29 +119,16 @@ public class Brute {
             }
         }
 
-        private static void printPoints(List<List<Point>> collinear) {
-            for (List<Point> collinearPoints : collinear) {
-                Iterator<Point> iterator = collinearPoints.iterator();
-                while (iterator.hasNext()) {
-                    Point point = iterator.next();
-                    if (!iterator.hasNext()) {
-                        StdOut.println(point);
-                    } else {
-                        StdOut.print(point + " -> ");
-                    }
-                }
+        private static void printPoints(LineSegment[] collinear) {
+            for (LineSegment segment : collinear) {
+                StdOut.println(segment);
             }
         }
 
-        private static void drawLines(List<List<Point>> collinear) {
-            for (List<Point> collinearPoints : collinear) {
-                drawLine(collinearPoints);
+        private static void drawLines(LineSegment[] collinear) {
+            for (LineSegment segment : collinear) {
+                segment.draw();
             }
-        }
-
-        private static void drawLine(List<Point> collinearPoints) {
-            collinearPoints.get(0).drawTo(
-                collinearPoints.get(collinearPoints.size() - 1));
         }
     }
 }

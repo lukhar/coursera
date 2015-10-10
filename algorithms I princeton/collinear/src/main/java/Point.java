@@ -66,6 +66,10 @@ public class Point implements Comparable<Point> {
         return (double) dx / (double) dy;
     }
 
+    public Comparator<Point> slopeOrder() {
+        return SLOPE_ORDER;
+    }
+
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
