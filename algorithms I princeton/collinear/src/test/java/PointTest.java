@@ -28,7 +28,7 @@ public class PointTest {
         Point base = new Point(2, 2);
         Point steeper = new Point(3, 4);
         Point smoother = new Point(4, 3);
-        assertThat(base.SLOPE_ORDER.compare(smoother, steeper)).isLessThan(0);
+        assertThat(base.slopeOrder().compare(smoother, steeper)).isLessThan(0);
     }
 
     @Test

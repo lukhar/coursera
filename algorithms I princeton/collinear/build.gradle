@@ -32,7 +32,7 @@ findbugs {
 
 task copy(type: Copy) {
     from 'src/main/java/BruteCollinearPoints.java'
-    from 'src/main/java/Fast.java'
+    from 'src/main/java/FastCollinearPoints.java'
     from 'src/main/java/Point.java'
     into 'build/collinear'
 }
