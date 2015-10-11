@@ -17,7 +17,7 @@ public class Point implements Comparable<Point> {
 
     private static final double POSITIVE_ZERO = 0.0;
 
-    private final Comparator<Point> SLOPE_ORDER = new Comparator<Point>() {
+    private final Comparator<Point> slopeOrder = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
             double diff = slopeTo(o1) - slopeTo(o2);
@@ -83,7 +83,7 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        return SLOPE_ORDER;
+        return slopeOrder;
     }
 
     /**

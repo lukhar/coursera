@@ -11,7 +11,7 @@ public class BruteCollinearPoints {
     private static final int MIN_SIZE = 4;
 
     private final Point[] points;
-    private List<LineSegment> segments = new ArrayList<>();
+    private int numberOfSegments;
 
     public BruteCollinearPoints(Point[] points) {
         if (points == null) {
@@ -22,7 +22,7 @@ public class BruteCollinearPoints {
             throw new IllegalArgumentException();
         }
 
-        this.points = points.clone();
+        this.points = Arrays.copyOf(points, points.length);
     }
 
     public static void main(String[] args) {
@@ -66,7 +66,7 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        segments = new ArrayList<>();
+        List<LineSegment> segments = new ArrayList<>();
 
         Arrays.sort(points);
 
@@ -82,11 +82,13 @@ public class BruteCollinearPoints {
             }
         }
 
+        this.numberOfSegments = segments.size();
+
         return segments.toArray(new LineSegment[segments.size()]);
     }
 
     public int numberOfSegments() {
-       return segments.size();
+       return numberOfSegments;
     }
 
     private static class Input {
@@ -108,12 +110,13 @@ public class BruteCollinearPoints {
 
     private static class Output {
 
-        static {
+        private static void setScale() {
             StdDraw.setXscale(0, 32768);
             StdDraw.setYscale(0, 32768);
         }
 
         private static void drawPoints(Point... points) {
+            setScale();
             for (Point point : points) {
                 point.draw();
             }
@@ -126,6 +129,7 @@ public class BruteCollinearPoints {
         }
 
         private static void drawLines(LineSegment[] collinear) {
+            setScale();
             for (LineSegment segment : collinear) {
                 segment.draw();
             }

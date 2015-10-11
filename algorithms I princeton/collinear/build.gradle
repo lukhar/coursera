@@ -43,6 +43,7 @@ task zip(dependsOn: copy, type: Zip) {
 
 checkstyle {
     sourceSets = [ rootProject.sourceSets.main ]
+    toolVersion = '6.11.2'
 }
 
 build.dependsOn zip

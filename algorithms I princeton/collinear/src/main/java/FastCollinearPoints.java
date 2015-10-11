@@ -9,13 +9,12 @@ import java.util.TreeSet;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class FastCollinearPoints {
 
     private static final int MIN_SIZE = 4;
     private final Point[] points;
-    private List<LineSegment> segments = new ArrayList<>();
+    private int numberOfSegments;
 
     public FastCollinearPoints(Point[] points) {
         Arrays.sort(points);
@@ -52,9 +51,9 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        segments = new ArrayList<>();
+        List<LineSegment> segments = new ArrayList<>();
         Point[] ordered = Arrays.copyOf(points, points.length);
-        Set<TreeSet<Point>> processedSequences = new HashSet<>();
+        Set<Double> processedSlopes = new TreeSet<>();
 
         Arrays.sort(ordered);
 
@@ -79,22 +78,27 @@ public class FastCollinearPoints {
                 }
             }
 
-            for (TreeSet<Point> sortedPoints : pointsBySlope.values()) {
-                if (sortedPoints.size() >= MIN_SIZE
-                    && !processedSequences.contains(sortedPoints)) {
+            for (Map.Entry<Double, TreeSet<Point>> slopeAndPoints :
+                pointsBySlope.entrySet()) {
+
+                if (slopeAndPoints.getValue().size() >= MIN_SIZE
+                    && !processedSlopes.contains(slopeAndPoints.getKey())) {
                     segments.add(new LineSegment(
-                        sortedPoints.first(), sortedPoints.last()));
+                        slopeAndPoints.getValue().first(),
+                        slopeAndPoints.getValue().last()));
                 }
             }
 
-            processedSequences.addAll(pointsBySlope.values());
+            processedSlopes.addAll(pointsBySlope.keySet());
         }
+
+        this.numberOfSegments = segments.size();
 
         return segments.toArray(new LineSegment[segments.size()]);
     }
 
     public int numberOfSegments() {
-        return segments.size();
+        return numberOfSegments;
     }
 
     private static class Input {
@@ -116,12 +120,13 @@ public class FastCollinearPoints {
 
     private static class Output {
 
-        static {
+        private static void setScale() {
             StdDraw.setXscale(0, 32768);
             StdDraw.setYscale(0, 32768);
         }
 
         private static void drawPoints(Point... points) {
+            setScale();
             for (Point point : points) {
                 point.draw();
             }
@@ -134,6 +139,7 @@ public class FastCollinearPoints {
         }
 
         private static void drawLines(LineSegment[] collinear) {
+            setScale();
             for (LineSegment segment : collinear) {
                 segment.draw();
             }
