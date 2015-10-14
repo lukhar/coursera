@@ -54,6 +54,24 @@ class FastCollinearPointsTest extends Specification implements PointMixin, Compa
          point(1234, 5678),
          point(14000, 10000)] | [new LineSegment(point(14000, 10000), point(32000, 10000))] | 1
 
+        [point(10000, 0),
+         point(8000, 2000),
+         point(2000, 8000),
+         point(0, 10000),
+         point(20000, 0),
+         point(18000, 2000),
+         point(2000, 18000),
+         point(10000, 20000),
+         point(30000, 0),
+         point(0, 30000),
+         point(20000, 10000),
+         point(13000, 0),
+         point(11000, 3000),
+         point(5000, 12000),
+         point(9000, 6000)]   | [new LineSegment(point(10000, 0), point(30000, 0)),
+                                 new LineSegment(point(10000, 0), point(0, 10000)),
+                                 new LineSegment(point(13000, 0), point(5000, 12000)),
+                                 new LineSegment(point(30000, 0), point(0, 30000))]         | 4
     }
 }
 

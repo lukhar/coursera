@@ -2,19 +2,19 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.awt.geom.Arc2D;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
-import java.util.Set;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 public class FastCollinearPoints {
 
     private static final int MIN_SIZE = 4;
     private final Point[] points;
-    private int numberOfSegments;
+    private int numberOfLineSegments;
 
     public FastCollinearPoints(Point[] points) {
         Arrays.sort(points);
@@ -51,15 +51,16 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        List<LineSegment> segments = new ArrayList<>();
         Point[] ordered = Arrays.copyOf(points, points.length);
-        Set<Double> processedSlopes = new TreeSet<>();
+        TreeMap<Point, TreeSet<Point>> segments = new TreeMap<>();
+        List<LineSegment> lineSegments = new ArrayList<>();
 
         Arrays.sort(ordered);
 
         for (final Point ref : ordered) {
-            Map<Double, TreeSet<Point>> pointsBySlope = new HashMap<>();
             Arrays.sort(points, ref.slopeOrder());
+            TreeSet<Point> currentSegment = new TreeSet<>();
+            double previousSlope = Double.MAX_VALUE;
 
             for (final Point point : points) {
                 if (point.equals(ref)) {
@@ -68,37 +69,60 @@ public class FastCollinearPoints {
 
                 double slope = ref.slopeTo(point);
 
-                if (pointsBySlope.containsKey(slope)) {
-                    pointsBySlope.get(slope).add(point);
-                } else {
-                    TreeSet<Point> sameSlopePoints = new TreeSet<>();
-                    sameSlopePoints.add(ref);
-                    sameSlopePoints.add(point);
-                    pointsBySlope.put(slope, sameSlopePoints);
+                if (slope != previousSlope) {
+                    if (currentSegment.size() >= MIN_SIZE) {
+                        Point first = currentSegment.first();
+                        Point last = currentSegment.last();
+
+                        if (segments.containsKey(first)
+                            && !segments.get(first).contains(last)) {
+                            segments.get(first).add(last);
+                        }
+                        else if (!segments.containsKey(first)) {
+                            TreeSet<Point> temp = new TreeSet<>();
+                            temp.add(last);
+                            segments.put(first, temp);
+                        }
+                    }
+                    currentSegment = new TreeSet<>();
+                    currentSegment.add(ref);
                 }
+
+                currentSegment.add(point);
+                previousSlope = slope;
             }
 
-            for (Map.Entry<Double, TreeSet<Point>> slopeAndPoints :
-                pointsBySlope.entrySet()) {
+            if (currentSegment.size() >= MIN_SIZE) {
+                Point first = currentSegment.first();
+                Point last = currentSegment.last();
 
-                if (slopeAndPoints.getValue().size() >= MIN_SIZE
-                    && !processedSlopes.contains(slopeAndPoints.getKey())) {
-                    segments.add(new LineSegment(
-                        slopeAndPoints.getValue().first(),
-                        slopeAndPoints.getValue().last()));
+                if (segments.containsKey(first)
+                    && !segments.get(first).contains(last)) {
+                    segments.get(first).add(last);
+                }
+                else if (!segments.containsKey(first)) {
+                    TreeSet<Point> temp = new TreeSet<>();
+                    temp.add(last);
+                    segments.put(first, temp);
                 }
             }
-
-            processedSlopes.addAll(pointsBySlope.keySet());
         }
 
-        this.numberOfSegments = segments.size();
+        for (Map.Entry<Point, TreeSet<Point>> segmentsByPoint
+            : segments.entrySet()) {
+            Point first = segmentsByPoint.getKey();
+            for (Point last : segmentsByPoint.getValue()) {
+                lineSegments.add(new LineSegment(first, last));
+            }
+        }
 
-        return segments.toArray(new LineSegment[segments.size()]);
+        this.numberOfLineSegments = lineSegments.size();
+
+        return lineSegments.toArray(new LineSegment[lineSegments.size()]);
     }
 
     public int numberOfSegments() {
-        return numberOfSegments;
+        return numberOfLineSegments;
     }
 
     private static class Input {
