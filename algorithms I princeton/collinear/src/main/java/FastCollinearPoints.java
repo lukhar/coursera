@@ -45,21 +45,17 @@ public class FastCollinearPoints {
             return lineSegments.toArray(new LineSegment[lineSegments.size()]);
         }
 
-        Point[] ordered = Arrays.copyOf(points, points.length);
+        Point[] reordered = Arrays.copyOf(points, points.length);
         TreeMap<Point, TreeSet<Point>> segments = new TreeMap<>();
         lineSegments = new ArrayList<>();
 
-        Arrays.sort(ordered);
-
-        for (final Point ref : ordered) {
-            Arrays.sort(points, ref.slopeOrder());
+        for (final Point ref : this.points) {
+            Arrays.sort(reordered, ref.slopeOrder());
             TreeSet<Point> currentSegment = new TreeSet<>();
             double previousSlope = Double.MAX_VALUE;
 
-            for (final Point point : points) {
-                if (point.equals(ref)) {
-                    continue;
-                }
+            for (int i = 1; i < reordered.length; i++) {
+                Point point = reordered[i];
 
                 double slope = ref.slopeTo(point);
 
@@ -68,18 +64,12 @@ public class FastCollinearPoints {
                         Point first = currentSegment.first();
                         Point last = currentSegment.last();
 
-                        if (segments.containsKey(first)
-                            && !segments.get(first).contains(last)) {
-                            segments.get(first).add(last);
-                        }
-                        else if (!segments.containsKey(first)) {
-                            TreeSet<Point> temp = new TreeSet<>();
-                            temp.add(last);
-                            segments.put(first, temp);
-                        }
+                        segments.putIfAbsent(
+                            first,
+                            new TreeSet<>(Arrays.asList(last)));
+                        segments.get(first).add(last);
                     }
-                    currentSegment = new TreeSet<>();
-                    currentSegment.add(ref);
+                    currentSegment = new TreeSet<>(Arrays.asList(ref));
                 }
 
                 currentSegment.add(point);
@@ -90,15 +80,8 @@ public class FastCollinearPoints {
                 Point first = currentSegment.first();
                 Point last = currentSegment.last();
 
-                if (segments.containsKey(first)
-                    && !segments.get(first).contains(last)) {
-                    segments.get(first).add(last);
-                }
-                else if (!segments.containsKey(first)) {
-                    TreeSet<Point> temp = new TreeSet<>();
-                    temp.add(last);
-                    segments.put(first, temp);
-                }
+                segments.putIfAbsent(first, new TreeSet<>(Arrays.asList(last)));
+                segments.get(first).add(last);
             }
         }
 
@@ -117,7 +100,6 @@ public class FastCollinearPoints {
         if (lineSegments == null) {
             segments();
         }
-
         return lineSegments.size();
     }
 
