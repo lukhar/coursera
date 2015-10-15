@@ -5,23 +5,19 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeSet;
 
 public class BruteCollinearPoints {
 
     private static final int MIN_SIZE = 4;
 
     private final Point[] points;
-    private int numberOfSegments;
+    private List<LineSegment> lineSegments;
 
     public BruteCollinearPoints(Point[] points) {
-        if (points == null) {
-            throw new NullPointerException();
-        }
-
         if (hasDuplicates(points)) {
             throw new IllegalArgumentException();
         }
-
         this.points = Arrays.copyOf(points, points.length);
     }
 
@@ -39,15 +35,8 @@ public class BruteCollinearPoints {
         Output.drawLines(collinear);
     }
 
-    private boolean hasDuplicates(Point[] elements) {
-        Arrays.sort(elements);
-        for (int i = 1; i < elements.length; i++) {
-            if (elements[i - 1].compareTo(elements[i]) == 0) {
-                return true;
-            }
-        }
-
-        return false;
+    private static boolean hasDuplicates(Point[] elements) {
+        return new TreeSet<>(Arrays.asList(elements)).size() != elements.length;
     }
 
     private static boolean sameSlope(Point ref, Point... points) {
@@ -66,7 +55,11 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        List<LineSegment> segments = new ArrayList<>();
+        if (lineSegments != null) {
+            lineSegments.toArray(new LineSegment[lineSegments.size()]);
+        }
+
+        lineSegments = new ArrayList<>();
 
         Arrays.sort(points);
 
@@ -75,20 +68,21 @@ public class BruteCollinearPoints {
                 for (int k = j + 1; k < points.length; k++) {
                     for (int l = k + 1; l < points.length; l++) {
                         if (sameSlope(points[i], points[j], points[k], points[l])) {
-                            segments.add(new LineSegment(points[i], points[l]));
+                            lineSegments.add(new LineSegment(points[i], points[l]));
                         }
                     }
                 }
             }
         }
 
-        this.numberOfSegments = segments.size();
-
-        return segments.toArray(new LineSegment[segments.size()]);
+        return lineSegments.toArray(new LineSegment[lineSegments.size()]);
     }
 
     public int numberOfSegments() {
-       return numberOfSegments;
+        if (lineSegments == null) {
+            segments();
+        }
+        return lineSegments.size();
     }
 
     private static class Input {

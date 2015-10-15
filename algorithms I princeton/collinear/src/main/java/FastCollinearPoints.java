@@ -2,7 +2,6 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.awt.geom.Arc2D;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,26 +13,17 @@ public class FastCollinearPoints {
 
     private static final int MIN_SIZE = 4;
     private final Point[] points;
-    private int numberOfLineSegments;
+    private List<LineSegment> lineSegments;
 
     public FastCollinearPoints(Point[] points) {
-        Arrays.sort(points);
-
         if (hasDuplicates(points)) {
             throw new IllegalArgumentException();
         }
-
-        this.points = points.clone();
+        this.points = Arrays.copyOf(points, points.length);
     }
 
-    private boolean hasDuplicates(Point[] elements) {
-        for (int i = 1; i < elements.length; i++) {
-            if (elements[i - 1].compareTo(elements[i]) == 0) {
-                return true;
-            }
-        }
-
-        return false;
+    private static boolean hasDuplicates(Point[] elements) {
+        return new TreeSet<>(Arrays.asList(elements)).size() != elements.length;
     }
 
     public static void main(String[] args) {
@@ -51,9 +41,13 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() {
+        if (lineSegments != null) {
+            return lineSegments.toArray(new LineSegment[lineSegments.size()]);
+        }
+
         Point[] ordered = Arrays.copyOf(points, points.length);
         TreeMap<Point, TreeSet<Point>> segments = new TreeMap<>();
-        List<LineSegment> lineSegments = new ArrayList<>();
+        lineSegments = new ArrayList<>();
 
         Arrays.sort(ordered);
 
@@ -116,13 +110,15 @@ public class FastCollinearPoints {
             }
         }
 
-        this.numberOfLineSegments = lineSegments.size();
-
         return lineSegments.toArray(new LineSegment[lineSegments.size()]);
     }
 
     public int numberOfSegments() {
-        return numberOfLineSegments;
+        if (lineSegments == null) {
+            segments();
+        }
+
+        return lineSegments.size();
     }
 
     private static class Input {
