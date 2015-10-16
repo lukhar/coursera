@@ -64,8 +64,7 @@ public class FastCollinearPoints {
                         Point first = currentSegment.first();
                         Point last = currentSegment.last();
 
-                        segments.putIfAbsent(
-                            first,
+                        segments.putIfAbsent(first,
                             new TreeSet<>(Arrays.asList(last)));
                         segments.get(first).add(last);
                     }
@@ -80,7 +79,8 @@ public class FastCollinearPoints {
                 Point first = currentSegment.first();
                 Point last = currentSegment.last();
 
-                segments.putIfAbsent(first, new TreeSet<>(Arrays.asList(last)));
+                segments.putIfAbsent(first,
+                    new TreeSet<>(Arrays.asList(last)));
                 segments.get(first).add(last);
             }
         }
