@@ -51,8 +51,10 @@ public class FastCollinearPoints {
 
         for (final Point ref : this.points) {
             Arrays.sort(reordered, ref.slopeOrder());
-            TreeSet<Point> currentSegment = new TreeSet<>();
+            int currentSegmentSize = 1;
             double previousSlope = Double.MAX_VALUE;
+            Point first = ref;
+            Point last = ref;
 
             for (int i = 1; i < reordered.length; i++) {
                 Point point = reordered[i];
@@ -60,24 +62,29 @@ public class FastCollinearPoints {
                 double slope = ref.slopeTo(point);
 
                 if (slope != previousSlope) {
-                    if (currentSegment.size() >= MIN_SIZE) {
-                        Point first = currentSegment.first();
-                        Point last = currentSegment.last();
+                    if (currentSegmentSize >= MIN_SIZE) {
 
                         segments.putIfAbsent(first,
                             new TreeSet<>(Arrays.asList(last)));
                         segments.get(first).add(last);
                     }
-                    currentSegment = new TreeSet<>(Arrays.asList(ref));
+                    first = ref;
+                    last = ref;
+                    currentSegmentSize = 1;
                 }
 
-                currentSegment.add(point);
+                if (smaller(first, point)) {
+                    first = point;
+                }
+                else if (larger(last, point)) {
+                    last = point;
+                }
+
+                currentSegmentSize += 1;
                 previousSlope = slope;
             }
 
-            if (currentSegment.size() >= MIN_SIZE) {
-                Point first = currentSegment.first();
-                Point last = currentSegment.last();
+            if (currentSegmentSize >= MIN_SIZE) {
 
                 segments.putIfAbsent(first,
                     new TreeSet<>(Arrays.asList(last)));
@@ -94,6 +101,14 @@ public class FastCollinearPoints {
         }
 
         return lineSegments.toArray(new LineSegment[lineSegments.size()]);
+    }
+
+    private static boolean larger(Point last, Point point) {
+        return point.compareTo(last) > 0;
+    }
+
+    private static boolean smaller(Point first, Point point) {
+        return point.compareTo(first) < 0;
     }
 
     public int numberOfSegments() {
