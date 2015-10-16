@@ -1,4 +1,6 @@
 import edu.princeton.cs.algs4.Point2D
+import edu.princeton.cs.algs4.RectHV
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class PointSETTest extends Specification {
@@ -92,6 +94,7 @@ class PointSETTest extends Specification {
         point(1.0, 1.0) | point(4.0, 2.0) | point(1.5, 20.0)
     }
 
+    @Ignore
     def 'given set of points find nearest one'() {
         given:
         def points = new PointSET()
